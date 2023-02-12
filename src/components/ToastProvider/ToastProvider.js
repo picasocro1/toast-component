@@ -7,6 +7,18 @@ export const ToastContext = React.createContext()
 function ToastProvider({ children }) {
   const [data, setData] = React.useState([])
 
+  React.useEffect(() => {
+    const onKeyDown = (event) => {
+      if (event.code !== 'Escape') return
+
+      setData([])
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
   const createToastData = ({ variant, message }) => {
     const id = window.crypto.randomUUID()
     const dismiss = () => setData((data) => data.filter(

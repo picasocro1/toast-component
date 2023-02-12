@@ -12,8 +12,6 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState('')
   const [variant, setVariant] = React.useState(defaultVariant)
 
-  console.log('rerender')
-
   const onSubmit = (event) => {
     event.preventDefault()
     addToastData({ variant, message })
