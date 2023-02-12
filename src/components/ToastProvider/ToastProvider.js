@@ -1,4 +1,5 @@
 import React from "react";
+import {useEscapeKey} from '../../hooks/useEscapeKey'
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
@@ -7,17 +8,7 @@ export const ToastContext = React.createContext()
 function ToastProvider({ children }) {
   const [data, setData] = React.useState([])
 
-  React.useEffect(() => {
-    const onKeyDown = (event) => {
-      if (event.code !== 'Escape') return
-
-      setData([])
-    }
-
-    window.addEventListener('keydown', onKeyDown)
-
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
+  useEscapeKey(() => setData([]))
 
   const createToastData = ({ variant, message }) => {
     const id = window.crypto.randomUUID()
