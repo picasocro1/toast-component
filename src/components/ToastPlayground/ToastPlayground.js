@@ -4,32 +4,19 @@ import Button from '../Button';
 
 import styles from './ToastPlayground.module.css';
 import ToastShelf from '../ToastShelf'
-
-const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
-
-const defaultVariant = VARIANT_OPTIONS[0]
+import { ToastContext } from '../ToastProvider'
 
 function ToastPlayground() {
+  const { data, variants, defaultVariant, addToastData } = React.useContext(ToastContext)
+
   const [message, setMessage] = React.useState('')
   const [variant, setVariant] = React.useState(defaultVariant)
-  const [data, setData] = React.useState([])
 
-  const createToastData = ({ variant, message }) => {
-    const id = window.crypto.randomUUID()
-    const dismiss = () => setData((data) => data.filter(
-        (record) => record.id !== id
-    ))
-    return {
-      id,
-      variant,
-      message,
-      dismiss
-    }
-  }
+  console.log('rerender')
 
   const onSubmit = (event) => {
     event.preventDefault()
-    setData([...data, createToastData({ variant, message })])
+    addToastData({ variant, message })
     setMessage('')
     setVariant(defaultVariant)
   }
@@ -68,7 +55,7 @@ function ToastPlayground() {
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
             {
-              VARIANT_OPTIONS.map((option) => (
+              variants.map((option) => (
                   <label key={option} htmlFor={`variant-${option}`}>
                     <input
                         id={`variant-${option}`}
